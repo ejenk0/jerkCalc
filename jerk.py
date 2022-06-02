@@ -13,16 +13,16 @@ except ValueError:
 df = pandas.DataFrame(columns=["Trial", "Jerk", "Error"])
 
 for dir in sorted(dirs, key=lambda x: int(x[:-2])):
-    a = []
+    jerks = []
     for f in filter(lambda x: x[-4:] == ".csv", os.listdir("Data/Videos/" + dir)):
         data = pandas.read_csv("Data/Videos/" + dir + "/" + f)
         x = data["VideoAnalysis: Time (s)"]
         y = data["VideoAnalysis: X Velocity (m/s)"]
         fit = polyfit(x, y, 2)
         jerk = 2 * fit[0]
-        a.append(jerk)
-    avgjerk = round(average(a), 2)
-    error = round((max(a) - min(a)) / 2, 2)
+        jerks.append(jerk)
+    avgjerk = round(average(jerks), 2)
+    error = round((max(jerks) - min(jerks)) / 2, 2)
     df = df.append({"Trial": dir, "Jerk": avgjerk, "Error": error}, ignore_index=True)
 
 print(df)
